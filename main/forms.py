@@ -12,7 +12,8 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 # Datarequired tells that this variable is required. Lenght allows to specify min and max lenght of variable
 # Email verifies thats its a valid email.
 # Equalto checks if a field is equal to another field. Used to confirm passwords for example
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from main.models import User
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
@@ -24,6 +25,21 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password',
                              validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign up')
+
+    def validate_username(self, username):
+        # Check if the username supplied in current form matches with any username already in database.
+        # If there is a match the 'user' will have a value of the match, if not then 'user' will be None.
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('That username is taken. Please choose a different one')
+
+    def validate_email(self, email):
+        # Check if the username supplied in current form matches with any username already in database.
+        # If there is a match the 'user' will have a value of the match, if not then 'user' will be None.
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('That Email already exists. Please choose a different one')
+
 
 
 
