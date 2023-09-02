@@ -7,8 +7,8 @@ app = Flask(__name__)
 #Secret key is used to sign session cookies for protection against cookie data tampering
 app.config['SECRET_KEY'] = '41570e8b023610560c5c76480ac34c7b'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
-app.app_context().push()
+db = SQLAlchemy(app) # create db instance
+app.app_context().push() # needed for SQLalchemy to create db. Got from internet myself
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login' # redirect user to login page if they user /account url manually and are not logged in

@@ -8,7 +8,7 @@ from flask_wtf.file import FileField, FileAllowed
 # PasswordField is needed if youre going to have passwords in yoru class
 # SubmitField is for the submit button
 # Booleanfield allows for true false values. Good for keeping users logged in after they close app. User in 'remember' variable below
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 # Validators to validate the variables. Handy becuase you dont have to write the verification functions yourself
 # Datarequired tells that this variable is required. Lenght allows to specify min and max lenght of variable
 # Email verifies thats its a valid email.
@@ -75,3 +75,8 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('That Email already exists. Please choose a different one')
 
+
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Post')
