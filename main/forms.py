@@ -3,6 +3,7 @@
 
 # Main function thar our main class will inherit from
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 # StringField is needed if youre going to have string values in your class
 # PasswordField is needed if youre going to have passwords in yoru class
 # SubmitField is for the submit button
@@ -14,6 +15,8 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 # Equalto checks if a field is equal to another field. Used to confirm passwords for example
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from main.models import User
+from flask_login import current_user
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
@@ -50,4 +53,25 @@ class LoginForm(FlaskForm):
                              validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+
+class UpdateAccountForm(FlaskForm):
+    username = StringField('Username',
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpeg', 'png', 'jpg'])])
+    submit = SubmitField('Update')
+
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('That username is taken. Please choose a different one')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('That Email already exists. Please choose a different one')
 

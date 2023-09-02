@@ -15,4 +15,5 @@ pycparser
 six
 SQLAlchemy
 Werkzeug
+Pillow
 WTForms
