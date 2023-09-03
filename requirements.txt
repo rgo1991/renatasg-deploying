@@ -17,3 +17,6 @@ SQLAlchemy
 Werkzeug
 Pillow
 WTForms
+Flask-Mail
+export EMAIL_USER=renatas.gorodeckas2
+export EMAIL_PASSWOR=<password>
