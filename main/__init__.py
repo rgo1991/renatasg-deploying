@@ -4,25 +4,37 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
 import os
+from main.config import Config
 
-app = Flask(__name__)
-#Secret key is used to sign session cookies for protection against cookie data tampering
-app.config['SECRET_KEY'] = '41570e8b023610560c5c76480ac34c7b'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app) # create db instance
-app.app_context().push() # needed for SQLalchemy to create db. Got from internet myself
-bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)
-login_manager.login_view = 'login' # redirect user to login page if they user /account url manually and are not logged in
+
+db = SQLAlchemy() # create db instance
+bcrypt = Bcrypt()
+login_manager = LoginManager()
+login_manager.login_view = 'users.login' # redirect user to login page if they user /account url manually and are not logged in
 login_manager.login_message_category = 'info' # Updates flashed message style on login page, when trying to access /account url manually and are not logged in
-app.config['MAIL_SERVER'] = 'smtn.googlemail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USER_TLS'] = True
-app.config['MAIL_USER'] = 'renatas.gorodeckas2'
-app.config['MAIL_PASSWORD'] = 'Milikoniumokykla1991!'
-mail = Mail(app)
 
-from main import routes
+mail = Mail()
+
+
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(Config)  # Import the configs from the config.py file
+    app.app_context().push()  # needed for SQLalchemy to create db. Got from internet myself
+
+    db.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+    mail.init_app(app)
+
+    from main.users.routes import users
+    from main.posts.routes import posts
+    from main.main.routes import main
+
+    app.register_blueprint(users)
+    app.register_blueprint(posts)
+    app.register_blueprint(main)
+
+    return app
 
 
 
