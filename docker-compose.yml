@@ -1,0 +1,16 @@
+version: "3"
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+
+  nginx:
+    build: ./nginx/.
+      #volumes:
+      #- ./nginx/flaskblog:/etc/nginx/sites-enabled/flaskblog:ro
+      #- ./nginx/flaskblog:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    ports:
+      - "80:80"
