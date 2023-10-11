@@ -2,8 +2,8 @@ server {
         listen 80;                                 
         server_name localhost;                 
                                                    
-        location ^~ /static/ {                     
-                root /home/renatasg/flask-project/main;
+        location / {                     
+                root /usr/share/nginx/html;
                 include  /etc/nginx/mime.types;    
         }                                          
                                                    

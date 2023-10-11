@@ -1,5 +1,3 @@
-FROM nginx:ubuntu
-WORKDIR /usr/share/nginx/html
-#RUN rm -rf ./*
-#COPY ./home/renatasg/flask-project/main/static ./
-ENTRYPOINT ["nginx", "-g"]
+FROM nginx:latest
+COPY ./static ./usr/share/nginx/html
+RUN apt-get update && apt-get install -y procps
