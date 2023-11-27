@@ -5,7 +5,7 @@ COPY requirements.txt ./
 RUN apt-get update
 RUN pip3 install -r requirements.txt
 COPY . .
-EXPOSE 5000
+EXPOSE 5000 5003
 ENV FLASK_APP=run.py
 #CMD [ "sudo", "rm", "/etc/nginx/sites-enabled/default"]
 #COPY /nginx/flaskblog /etc/nginx/sites-enabled/flaskblog
